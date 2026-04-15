@@ -18,9 +18,9 @@ Within the **Coherence Under Constraint (CUC)** framework, *darkness* is not tre
 ---
 
 ## Core Idea
-
 > Systems do not require an opposing force to fail.  
 > They fail when coherence cannot be sustained across noise, constraints, and interfaces.
+> Darkness is not what opposes structure—it is what accumulates when structure fails.
 
 ---
 
@@ -128,3 +128,42 @@ The framework applies across:
 ---
 
 ## Repository Structure
+.
+├── paper/
+│ ├── darkness_functional.tex
+│ └── darkness_functional.pdf
+│
+├── src/
+│ └── darkness_simulation_package.py
+│
+├── figures/
+│ ├── comparison_r.png
+│ ├── comparison_D.png
+│ └── comparison_S.png
+│
+└── README.md
+
+
+---
+
+## Status
+
+- Core theory: complete  
+- Simulation: functional  
+- Initial validation: complete  
+- Extended experiments: in progress  
+
+---
+
+## Author
+
+Gage Fry  
+Coherence Under Constraint (CUC / UCCT)
+
+---
+
+## License
+
+TBD
+
+> Darkness is not what opposes structure—it is what accumulates when structure fails.
