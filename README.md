@@ -1,6 +1,8 @@
-# Darkness Functional > Darkness is not what opposes structure—it is what accumulates when structure fails.
+# Darkness Functional
 
 A quantitative framework for modeling coherence failure, system distortion, and persistence collapse under constraint.
+
+> Darkness is not what opposes structure—it is what accumulates when structure fails.
 
 ---
 
