@@ -1,7 +1,7 @@
 # Darkness Functional
+> Darkness is not what opposes structure—it is what accumulates when structure fails.
 
 A quantitative framework for modeling coherence failure, system distortion, and persistence collapse under constraint.
-
 ---
 
 ## Overview
@@ -166,4 +166,3 @@ Coherence Under Constraint (CUC / UCCT)
 
 TBD
 
-> Darkness is not what opposes structure—it is what accumulates when structure fails.
