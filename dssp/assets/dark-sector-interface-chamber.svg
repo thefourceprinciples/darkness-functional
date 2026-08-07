@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Dark Sector Interface Chamber</title>
+  <desc id="desc">Conceptual laboratory chamber with independent controls, null channels, accounting, shutdown, and stewardship gates.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="75%"><stop offset="0" stop-color="#15314a"/><stop offset=".58" stop-color="#071522"/><stop offset="1" stop-color="#02070d"/></radialGradient>
+    <radialGradient id="core"><stop offset="0" stop-color="#fff8c7"/><stop offset=".22" stop-color="#8edfff"/><stop offset=".55" stop-color="#7558db"/><stop offset="1" stop-color="#111327"/></radialGradient>
+    <linearGradient id="metal" x1="0" x2="1"><stop offset="0" stop-color="#273b4a"/><stop offset=".5" stop-color="#91a7b5"/><stop offset="1" stop-color="#1a2a37"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <text x="55" y="64" fill="#f3cb72" font-family="Arial" font-size="38" font-weight="700">DSSP — DARK SECTOR INTERFACE CHAMBER</text>
+  <text x="56" y="98" fill="#a8c9d9" font-family="Arial" font-size="17">Concept architecture: test an interface without presuming possession, containment, or extraction.</text>
+  <g transform="translate(600 355)">
+    <ellipse cx="0" cy="200" rx="340" ry="52" fill="#000" opacity=".5"/>
+    <circle r="154" fill="#091724" stroke="url(#metal)" stroke-width="18"/>
+    <circle r="112" fill="none" stroke="#f3cb72" stroke-width="6" opacity=".8"/>
+    <circle r="74" fill="url(#core)" filter="url(#glow)"/>
+    <g fill="none" stroke="#7bcce8" stroke-width="3" opacity=".7">
+      <ellipse rx="195" ry="55"/><ellipse rx="195" ry="55" transform="rotate(60)"/><ellipse rx="195" ry="55" transform="rotate(120)"/>
+    </g>
+    <g stroke="url(#metal)" stroke-width="17">
+      <line x1="-310" y1="0" x2="-158" y2="0"/><line x1="158" y1="0" x2="310" y2="0"/><line x1="0" y1="-250" x2="0" y2="-158"/><line x1="0" y1="158" x2="0" y2="244"/>
+    </g>
+    <text y="8" text-anchor="middle" fill="#07111d" font-family="Arial" font-size="22" font-weight="700">DSIC-7</text>
+  </g>
+  <g font-family="Arial" font-size="16">
+    <g transform="translate(52 155)"><rect width="260" height="122" rx="15" fill="#0b1c2a" stroke="#4b8098"/><text x="22" y="34" fill="#f3cb72" font-size="20" font-weight="700">SOURCE &amp; CALIBRATION</text><text x="22" y="66" fill="#cee0e9">Known injections</text><text x="22" y="91" fill="#cee0e9">Independent standards</text><text x="22" y="116" fill="#cee0e9">Immutable provenance</text></g>
+    <g transform="translate(52 315)"><rect width="260" height="122" rx="15" fill="#0b1c2a" stroke="#4b8098"/><text x="22" y="34" fill="#f3cb72" font-size="20" font-weight="700">NULL &amp; SHAM CHANNELS</text><text x="22" y="66" fill="#cee0e9">Coupling removed</text><text x="22" y="91" fill="#cee0e9">Command artifact tested</text><text x="22" y="116" fill="#cee0e9">Common mode exposed</text></g>
+    <g transform="translate(52 475)"><rect width="260" height="122" rx="15" fill="#0b1c2a" stroke="#4b8098"/><text x="22" y="34" fill="#f3cb72" font-size="20" font-weight="700">ACCOUNTING LEDGER</text><text x="22" y="66" fill="#cee0e9">Energy • momentum • heat</text><text x="22" y="91" fill="#cee0e9">Materials • information</text><text x="22" y="116" fill="#cee0e9">No unmeasured reservoir</text></g>
+    <g transform="translate(888 155)"><rect width="260" height="122" rx="15" fill="#0b1c2a" stroke="#4b8098"/><text x="22" y="34" fill="#f3cb72" font-size="20" font-weight="700">CONTROLLED COUPLING</text><text x="22" y="66" fill="#cee0e9">Preregistered scaling</text><text x="22" y="91" fill="#cee0e9">Reversal and modulation</text><text x="22" y="116" fill="#cee0e9">Independent readout</text></g>
+    <g transform="translate(888 315)"><rect width="260" height="122" rx="15" fill="#0b1c2a" stroke="#4b8098"/><text x="22" y="34" fill="#f3cb72" font-size="20" font-weight="700">SHUTDOWN &amp; RECOVERY</text><text x="22" y="66" fill="#cee0e9">Independent stop path</text><text x="22" y="91" fill="#cee0e9">Persistence audit</text><text x="22" y="116" fill="#cee0e9">Baseline restoration</text></g>
+    <g transform="translate(888 475)"><rect width="260" height="122" rx="15" fill="#0b1c2a" stroke="#4b8098"/><text x="22" y="34" fill="#f3cb72" font-size="20" font-weight="700">STEWARDSHIP GATE</text><text x="22" y="66" fill="#cee0e9">Containment before use</text><text x="22" y="91" fill="#cee0e9">Open futures</text><text x="22" y="116" fill="#cee0e9">Clean handoff &amp; release</text></g>
+  </g>
+  <text x="600" y="646" text-anchor="middle" fill="#f3cb72" font-family="Arial" font-size="20" font-weight="700">THE APPARATUS IS REAL. THE RESIDUAL MAY BE REAL. THE CANDIDATE REMAINS CONDITIONAL.</text>
+</svg>
