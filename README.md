@@ -112,6 +112,16 @@ In plain language:
 
 ---
 
+## Dark-Sector Stewardship Project
+
+The repository now includes the foundational **DSSP Master Packet v1.0**: a stewardship-first architecture for dark-sector residual analysis, claim calculus, gate logic, blinded qualification, candidate interfaces, false-darkness defense, safe analog laboratories, accounting, handoff, and release governance.
+
+DSSP preserves the original Darkness Functional scaffold while extending it into a bounded scientific and engineering research program.
+
+[Open the DSSP project index](dssp/README.md)
+
+---
+
 ## Initial Research Questions
 
 1. Can `D[Σ,t]` predict collapse before a system visibly fails?
@@ -149,15 +159,19 @@ The Darkness Functional predicts that:
 │   └── darkness_simulation_package.py
 ├── figures/
 │   └── README.md
-└── docs/
-    └── glossary.md
+├── docs/
+│   └── glossary.md
+└── dssp/
+    ├── README.md
+    ├── docs/
+    └── assets/
 ```
 
 ---
 
 ## Current Status
 
-This repository is at **v0.1.0**.
+This repository is at **v0.1.0** for the original Darkness Functional scaffold. The DSSP packet is independently versioned as **DSSP Master Packet v1.0**.
 
 The framework is:
 
@@ -179,7 +193,8 @@ Earlier language describing validation should be read as **internal conceptual v
 3. Add tests for parameter sensitivity.
 4. Compare behavior against existing synchronization and complex-systems models.
 5. Add an AI-memory case study focused on chronology, retrieval, contradiction, and provenance.
-6. Prepare a preprint-style paper for external critique.
+6. Begin the executable DSSP schema, residual-engine, and hidden-cause benchmark builds.
+7. Prepare a preprint-style paper for external critique.
 
 ---
 
