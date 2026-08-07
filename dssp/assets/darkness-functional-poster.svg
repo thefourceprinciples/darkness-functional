@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">The Dark Sector and the Darkness Functional</title>
+  <desc id="desc">Conceptual diagram showing observation minus explanation producing a residual that is audited before classification and stewardship.</desc>
+  <defs>
+    <radialGradient id="space" cx="52%" cy="44%" r="75%">
+      <stop offset="0" stop-color="#172947"/>
+      <stop offset="0.55" stop-color="#071323"/>
+      <stop offset="1" stop-color="#02060d"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" x2="1">
+      <stop offset="0" stop-color="#f4c66a"/>
+      <stop offset="1" stop-color="#fff0b4"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#space)"/>
+  <g fill="#d9f2ff" opacity=".7">
+    <circle cx="86" cy="83" r="2"/><circle cx="176" cy="142" r="1.5"/><circle cx="1062" cy="96" r="2"/><circle cx="1121" cy="208" r="1.3"/><circle cx="944" cy="594" r="1.6"/><circle cx="243" cy="588" r="1.4"/><circle cx="713" cy="84" r="1.2"/>
+  </g>
+  <text x="60" y="72" fill="url(#gold)" font-family="Arial, sans-serif" font-size="38" font-weight="700">THE DARK SECTOR &amp; THE DARKNESS FUNCTIONAL</text>
+  <text x="60" y="108" fill="#9fc7da" font-family="Arial, sans-serif" font-size="18">Measure the remainder. Protect the future.</text>
+  <g transform="translate(70 172)">
+    <rect width="250" height="190" rx="18" fill="#0d1d30" stroke="#5b86a4"/>
+    <circle cx="125" cy="70" r="43" fill="none" stroke="#78cbe8" stroke-width="4"/>
+    <path d="M82 76c27-34 61-41 87-11-27 31-58 38-87 11z" fill="none" stroke="#78cbe8" stroke-width="3"/>
+    <text x="125" y="139" text-anchor="middle" fill="#f4c66a" font-family="Arial" font-size="22" font-weight="700">OBSERVED</text>
+    <text x="125" y="166" text-anchor="middle" fill="#c6dbe6" font-family="Arial" font-size="15">measured data</text>
+  </g>
+  <text x="347" y="272" fill="#f4c66a" font-family="Arial" font-size="52">−</text>
+  <g transform="translate(405 172)">
+    <rect width="250" height="190" rx="18" fill="#0d1d30" stroke="#5b86a4"/>
+    <path d="M45 105 Q90 33 132 105 T210 105" fill="none" stroke="#c2a3ff" stroke-width="4"/>
+    <path d="M45 118 Q90 46 132 118 T210 118" fill="none" stroke="#c2a3ff" stroke-width="2" opacity=".5"/>
+    <text x="125" y="139" text-anchor="middle" fill="#f4c66a" font-family="Arial" font-size="22" font-weight="700">EXPLAINED</text>
+    <text x="125" y="166" text-anchor="middle" fill="#c6dbe6" font-family="Arial" font-size="15">model + known effects</text>
+  </g>
+  <text x="682" y="272" fill="#f4c66a" font-family="Arial" font-size="52">=</text>
+  <g transform="translate(742 172)">
+    <rect width="390" height="190" rx="18" fill="#11182d" stroke="#b28cff"/>
+    <circle cx="195" cy="82" r="55" fill="none" stroke="#b28cff" stroke-width="4" filter="url(#glow)"/>
+    <path d="M133 84c35-52 88-52 124 0-36 49-90 49-124 0z" fill="none" stroke="#f4c66a" stroke-width="3"/>
+    <text x="195" y="139" text-anchor="middle" fill="#f4c66a" font-family="Arial" font-size="22" font-weight="700">QUALIFIED REMAINDER</text>
+    <text x="195" y="166" text-anchor="middle" fill="#c6dbe6" font-family="Arial" font-size="15">audit before naming</text>
+  </g>
+  <g transform="translate(70 410)" font-family="Arial, sans-serif">
+    <rect width="1062" height="150" rx="20" fill="#081827" stroke="#355c75"/>
+    <text x="38" y="42" fill="#70e0b0" font-size="21" font-weight="700">FERTILE DARKNESS</text>
+    <text x="38" y="75" fill="#d1e6df" font-size="16">replicates • survives model changes • predicts • returns information</text>
+    <text x="38" y="116" fill="#ff8e83" font-size="21" font-weight="700">CORRUPTING DARKNESS</text>
+    <text x="38" y="142" fill="#f0d4d0" font-size="16">artifact • background leakage • circular fitting • hidden uncertainty • semantic promotion</text>
+    <path d="M720 38h285" stroke="#f4c66a" stroke-width="3"/>
+    <text x="862" y="73" text-anchor="middle" fill="#f4c66a" font-size="20" font-weight="700">OBSERVE → AUDIT → REPLICATE</text>
+    <text x="862" y="104" text-anchor="middle" fill="#f4c66a" font-size="20" font-weight="700">COUPLE → CONTAIN → STEWARD</text>
+    <text x="862" y="135" text-anchor="middle" fill="#b7cedb" font-size="15">No extraction before accounting.</text>
+  </g>
+  <text x="600" y="630" text-anchor="middle" fill="#f4c66a" font-family="Arial" font-size="21" font-weight="700">THE DARKNESS FUNCTIONAL PROTECTS THE REMAINDER FROM BEING PREMATURELY NAMED, EXPLOITED, OR ERASED.</text>
+</svg>
