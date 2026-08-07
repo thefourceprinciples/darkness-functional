@@ -4,7 +4,7 @@
 
 The **Dark-Sector Stewardship Project** is a research, software, experimental-design, claim-governance, and stewardship architecture for investigating unexplained physical residuals without prematurely naming them, mistaking uncertainty for a resource, or advancing from anomaly to engineering without causality, reversibility, accounting, containment, and release.
 
-![DSSP concept poster](assets/dssp-project-poster.jpg)
+![DSSP concept poster](assets/dssp-project-poster.svg)
 
 ## Current status
 
@@ -44,11 +44,16 @@ Observe -> Preserve -> Explain -> Subtract -> Audit -> Classify
 
 ## Visual concepts
 
-- [DSSP architecture poster](assets/dssp-project-poster.jpg)
-- [Dark sector and Darkness Functional poster](assets/darkness-functional-poster.jpg)
-- [Dark Sector Interface Chamber](assets/dark-sector-interface-chamber.jpg)
+- [DSSP architecture poster](assets/dssp-project-poster.svg)
+- [Dark sector and Darkness Functional poster](assets/darkness-functional-poster.svg)
+- [Dark Sector Interface Chamber](assets/dark-sector-interface-chamber.svg)
+- [Asset notes and evidential status](assets/README.md)
 
 These images are conceptual visualizations, not photographs of completed apparatus or empirical evidence.
+
+## Source package
+
+This branch contains the complete canonical Markdown project as a browsable, version-controlled packet. The formatted Word master and original high-resolution PNG images remain in the conversation artifact package because the GitHub connector used for this upload does not directly transfer large binary files.
 
 ## Foundational law
 
