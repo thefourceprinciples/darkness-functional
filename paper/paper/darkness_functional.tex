@@ -1,0 +1,108 @@
+\documentclass[11pt,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[margin=0.85in]{geometry}
+
+\title{\textbf{The Darkness Functional: A Diagnostic Framework for Coherence Loss, Interface Mismatch, and Closed-Loop Restoration Under Constraint}}
+\author{Gage Fry \\ \small Independent Researcher, Rockford, Illinois, USA \\ \small \texttt{https://github.com}}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Complex dynamical, informational, and physical systems rarely fail instantaneously; instead, they undergo gradual, silent coherence collapse driven by stochastic noise, boundary degradation, and inter-subsystem mismatch. Standard binary health checks and post-hoc output metrics frequently fail to detect accumulating fragility until macroscopic failure has already occurred. Building on the \textit{Coherence Under Constraint (CUC)} formalism, we introduce the \textbf{Darkness Functional} $D[\Sigma, t]$ and \textbf{Darkness-Aware Persistence} $S(t)$—a lightweight, domain-agnostic diagnostic and closed-loop stabilization architecture. Rather than treating ``darkness'' as an opposing substance or force, we formalize it as a measurable coherence-loss load that exponentially attenuates usable system persistence. We validate this framework across three testbeds: (1) a hierarchical 60-oscillator Kuramoto network subjected to transient perturbation and active phase restoration, (2) a multi-tier AI agent memory benchmark evaluating retrieval fragmentation, cross-store contradiction, and the ``high-throughput illusion,'' and (3) \textbf{CUC-Array v1}, a low-cost 40~kHz ultrasonic phased-array levitator implementing real-time acoustic phase restoration and Navier--Stokes cascade-gate telemetry on embedded hardware.
+\end{abstract}
+
+\section{Introduction}
+Across coupled physical oscillators, standing-wave acoustic traps, and long-horizon retrieval-augmented artificial intelligence (AI) agents, structural persistence depends on maintaining phase alignment across constrained state manifolds. In multi-scale systems, local subsystems can exhibit high internal order while global alignment deteriorates—a condition in which local coherence masks impending systemic collapse.
+
+To quantify hidden fragility prior to macroscopic failure, we formalize a diagnostic functional that aggregates four distinct modes of structural degradation into a single scalar load, paired with a closed-loop phase-restoration control law.
+
+\section{Mathematical Formulation}
+
+\subsection{The Darkness Functional}
+For a constrained system $\Sigma$ evolving over state space $\Omega$ at time $t$, we define the \textbf{Darkness Functional} $D[\Sigma, t] \in \mathbb{R}_{\ge 0}$ as a weighted linear combination of four normalized observables:
+\begin{equation}
+D[\Sigma, t] = \alpha\bigl(1 - r(t)\bigr) + \beta N(t) + \gamma F_C(t) + \delta M_I(t)
+\label{eq:darkness}
+\end{equation}
+where $\alpha, \beta, \gamma, \delta > 0$ are domain-calibrated sensitivity weights, and:
+\begin{itemize}
+    \item $r(t) \in [0, 1]$ is the global phase or semantic synchronization order parameter, so $1 - r(t)$ captures global alignment loss.
+    \item $N(t) \ge 0$ measures stochastic perturbation load, velocity variance, or off-topic retrieval noise.
+    \item $F_C(t) \ge 0$ quantifies boundary degradation or constraint failure outside an admissible manifold $\mathcal{S} \subseteq \Omega$.
+    \item $M_I(t) \ge 0$ measures subsystem interface mismatch, capturing both inter-group dispersion and divergence between local cluster coherence and global coherence.
+\end{itemize}
+
+\subsection{Darkness-Aware Persistence and Hysteresis}
+Usable system persistence $S(t)$ scales proportionally with global alignment $r(t)$, admissible manifold capacity $C(\Omega, t)$, and sustaining energy or computational throughput $\Phi(t)$, while decaying exponentially under accumulated darkness load:
+\begin{equation}
+S(t) = r(t) \, C(\Omega, t) \, \Phi(t) \, \exp\bigl(-D[\Sigma, t]\bigr)
+\label{eq:persistence}
+\end{equation}
+Alongside instantaneous load $D[\Sigma, t]$, we define the \textbf{cumulative historical darkness load}:
+\begin{equation}
+\mathcal{H}_D(t) = \int_0^t D[\Sigma, \tau] \, d\tau
+\label{eq:hysteresis}
+\end{equation}
+Equations~\eqref{eq:darkness}--\eqref{eq:hysteresis} yield five testable predictions: (P1) persistence $S(t)$ decays exponentially as $D[\Sigma, t]$ rises; (P2) interface mismatch $M_I(t)$ can dominate failure even when local subsystems remain synchronized; (P3) closed-loop restoration can recover active persistence $S(t)$ without erasing historical load $\mathcal{H}_D(t)$; (P4) local coherence can mask global instability; and (P5) increasing throughput $\Phi(t)$ without phase alignment accelerates incoherence (the \textit{high-throughput illusion}).
+
+\section{Computational Validation}
+
+\subsection{Hierarchical Kuramoto Network Testbed}
+We simulate $N = 60$ coupled phase oscillators $\theta_i \in [-\pi, \pi)$ partitioned into $G = 3$ equal subgroups with intrinsic frequencies $\omega_i \sim \mathcal{N}(0, 0.25^2)$, intra-group coupling $K_{\text{local}} = 1.2$, and inter-group coupling $K_{\text{global}} = 0.4$:
+\begin{equation}
+\dot{\theta}_i = \omega_i + \sum_{j=1}^{N} \frac{K_{ij}}{N} \sin(\theta_j - \theta_i) + u_{\text{restore}}(t) + \eta_i(t)
+\end{equation}
+The global order parameter $z = \frac{1}{N}\sum_{j=1}^N e^{i\theta_j} = r e^{i\psi}$ and subgroup order parameters $r_g$ define the interface mismatch:
+\begin{equation}
+M_I(t) = \frac{1}{G}\sum_{g=1}^{G} \bigl|r_g - \bar{r}_g\bigr| + \max\bigl(0, \bar{r}_g - r\bigr)
+\end{equation}
+Boundary degradation is evaluated outside the admissible phase window $|\theta_i| \le 1.2$~rad via $F_C(t) = \frac{1}{N}\sum_{i=1}^N \max(0, |\theta_i| - 1.2)^2$. During the perturbation window $t \in (10, 18)$, noise intensity increases from $\sigma = 0.08$ to $\sigma = 0.22$, driving a spike in $D[\Sigma, t]$ and collapsing $S(t)$. During the restoration window $t \in (22, 34)$, feedback control $u_{\text{restore}}(t) = k_{\text{restore}} \sin(\psi - \theta_i)$ suppresses $D[\Sigma, t]$ and restores $S(t)$ above critical gain $k_{\text{crit}}$, while $\mathcal{H}_D(t)$ retains a permanent record of the perturbation interval.
+
+\subsection{AI Memory and Retrieval Case Study}
+To evaluate Equations~\eqref{eq:darkness}--\eqref{eq:persistence} in informational systems, we model a 40-turn retrieval-augmented agent querying a multi-tier memory store (\texttt{working}, \texttt{episodic}, \texttt{archival}). Here, $r(t)$ measures query-document cosine alignment discounted by stale records; $N(t)$ captures distractor fraction and score dispersion; $F_C(t)$ tracks missing source provenance and chronological inversions; and $M_I(t)$ measures pairwise factual contradiction across retrieved records.
+
+\begin{table}[h]
+\centering
+\caption{Cross-Domain Mapping of Darkness Functional Observables}
+\label{tab:mapping}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Term} & \textbf{AI Memory Store} & \textbf{CUC-Array v1 Hardware} \\
+\midrule
+$1 - r(t)$ & Semantic alignment loss & Standing-wave lock loss \\
+$N(t)$ & Distractor \& score variance & Turbulent acoustic jitter \\
+$F_C(t)$ & Missing provenance / order & Emitter phase-drift penalty \\
+$M_I(t)$ & Cross-tier factual conflict & Multi-channel phase skew \\
+$u_{\text{restore}}$ & Memory consolidation pass & Differential PWM phase shift \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+When contradictory updates and unprovenanced entries are injected (turns 10--19), $M_I(t)$ and $F_C(t)$ spike despite moderate cosine similarity. Doubling retrieval volume ($\Phi = 1.8$, turns 20--27) increases raw token throughput while driving $S(t) \to 0$ via $\exp(-D)$. Executing a provenance-verification and contradiction-pruning consolidation pass at turn 28 restores $S(t)$ within two cycles.
+
+\section{Hardware Implementation: CUC-Array v1}
+To validate real-time closed-loop control on physical wave dynamics, we designed \textbf{CUC-Array v1}, a benchtop 40~kHz ultrasonic acoustic levitator driven by an ESP32-S3 microcontroller and L293D dual H-bridge drivers. Two opposing 5-emitter arrays (\texttt{TCT40-16T}, $\lambda \approx 8.58$~mm in air) separated by a resonant cavity height of $34.3\text{ mm} = 4\lambda$ establish standing-wave Gor'kov potential wells spaced at $\lambda/2 \approx 4.29$~mm that suspend 2--3~mm expanded polystyrene spheres.
+
+An electret microphone sensor (\texttt{MAX4466}) samples the acoustic cavity at $\sim 66$~kHz, computing standing-wave coherence $r(t)$, turbulent jitter $N(t)$, and a dimensionless Navier--Stokes cascade ratio $\Gamma_{\text{cascade}}(t)$ at a 100~Hz control rate. When external airflow perturbs the cavity such that $D[\Sigma, t] > D_{\text{thresh}}$ or $\Gamma_{\text{cascade}}(t)$ trips the turbulent streaming gate, the firmware applies proportional differential phase shifts across the bottom emitter bank to recenter the trapping potential prior to particle ejection.
+
+\section{Conclusion and Future Work}
+The Darkness Functional provides a computationally inexpensive, mathematically unified diagnostic layer capable of anticipating failure across coupled dynamical networks, agentic AI memory stores, and embedded acoustic phased arrays. Future work includes multi-axis 2D holographic phase steering on CUC-Array v2 and empirical benchmarking across long-horizon enterprise retrieval datasets.
+
+\begin{thebibliography}{9}
+\bibitem{kuramoto1984}
+Y. Kuramoto, \textit{Chemical Oscillations, Waves, and Turbulence}, Springer-Verlag, Berlin, 1984.
+
+\bibitem{gorkov1962}
+L. P. Gor'kov, ``On the forces acting on a small particle in an acoustical field in an ideal fluid,'' \textit{Soviet Physics Doklady}, vol. 6, pp. 773--775, 1962.
+
+\bibitem{marzo2015}
