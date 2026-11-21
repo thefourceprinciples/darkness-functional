@@ -1,0 +1,39 @@
+name: Darkness Functional CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  verify-simulations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest verification suite
+        run: |
+          pytest -v
+
+      - name: Verify simulation figure generation
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python src/darkness_simulation_package.py
+          python src/restoration_sweep.py
+          python src/ai_memory_darkness.py
+          python src/lens_array_bridge.py
