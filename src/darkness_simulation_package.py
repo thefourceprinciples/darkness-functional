@@ -79,8 +79,8 @@ def run_simulation(
     cumulative_darkness = 0.0
 
     for step in range(steps):
-        t = step * dt
         in_perturb = perturb_window[0] < t < perturb_window[1]
+        in_restore = restore_window[0] < t < restore_window[1]
         in_restore = restore_window[0] < t < restore_window[1]
         noise_sigma = noise_perturb if in_perturb else noise_base
 
