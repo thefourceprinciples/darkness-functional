@@ -6,14 +6,14 @@ DEFAULT_FIG_DIR = Path(__file__).resolve().parent.parent / "figures"
 
 
 def order_parameter(theta: np.ndarray) -> tuple[float, float]:
-    """Compute Kuramoto order parameter magnitude r in and mean phase psi."""
+    """Compute Kuramoto order parameter magnitude r in [0, 1] and mean phase psi."""
     z = np.mean(np.exp(1j * theta))
     return float(np.abs(z)), float(np.angle(z))
 
 
 def group_order_parameters(theta: np.ndarray, group_ids: np.ndarray, groups: int) -> np.ndarray:
     """Compute order parameter r_g for each subsystem group."""
-    return np.array([order_parameter(theta[group_ids == g]) for g in range(groups)])
+    return np.array([order_parameter(theta[group_ids == g])[0] for g in range(groups)])
 
 
 def interface_mismatch(rg: np.ndarray, r_global: float) -> float:
@@ -80,8 +80,8 @@ def run_simulation(
 
     for step in range(steps):
         t = step * dt
-        in_perturb = perturb_window < t < perturb_window
-        in_restore = restore_window < t < restore_window
+        in_perturb = perturb_window[0] < t < perturb_window[1]
+        in_restore = restore_window[0] < t < restore_window[1]
         noise_sigma = noise_perturb if in_perturb else noise_base
 
         phase_diff = theta[None, :] - theta[:, None]
