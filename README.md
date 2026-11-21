@@ -1,213 +1,98 @@
 # Darkness Functional
 
-> Darkness is not an opposing substance. In this framework, it is a measurable load condition that appears when coherence fails, noise accumulates, constraints degrade, or interfaces misalign.
+![CI Status](https://github.com)
+[![License: MIT](https://shields.io)](LICENSE)
 
-**Author:** Gage Fry  
-**Project lineage:** The Fource Principles / Coherence Under Constraint (CUC)  
-**Status:** Early-stage research framework and simulation scaffold  
-**Version:** v0.1.0  
-**License:** MIT
+A quantitative diagnostic framework and closed-loop stabilization suite for modeling coherence failure, interface mismatch, and persistence collapse under constraint.
+
+**Author:** Gage Fry (Rockford, Illinois)  
+**Project Lineage:** The Fource Principles / Coherence Under Constraint (CUC)  
+**Status:** v0.2.0 — Simulation Benchmarks, Automated CI, AI Memory Case Study & CUC-Array v1 Hardware Blueprint  
 
 ---
 
 ## Overview
 
-The **Darkness Functional** is a diagnostic framework for modeling coherence loss, distortion, and persistence collapse in constrained systems.
+Complex dynamical networks, agentic AI memory stores, and physical sensor-actuator arrays rarely fail instantaneously. Instead, they suffer from **silent coherence collapse** driven by phase drift, stochastic noise, boundary degradation, and inter-subsystem contradiction.
 
-Within the broader **Coherence Under Constraint (CUC)** framework, darkness is not treated as a moral category, mystical substance, or new physical force. It is modeled as a derived system condition that increases when a system loses its ability to maintain usable structure under constraint.
-
-In this repository, *darkness* means **coherence-loss darkness**: accumulated distortion, noise, mismatch, decay, or hidden contradiction that reduces persistence.
-
-A separate interpretive distinction is important:
-
-- **Fertile darkness** means latent, protected, unexpressed, or not-yet-visible potential.
-- **Corrupting darkness** means hidden distortion, incoherence, accumulated contradiction, or entropy leakage.
-
-This repository models the second category: corrupting or coherence-loss darkness.
-
----
-
-## Core Idea
-
-Systems do not need an opposing force in order to fail.
-
-They fail when coherence cannot be sustained across noise, constraints, dissipation, and interfaces.
-
-The Darkness Functional gives that failure load a measurable form.
+Within the **Coherence Under Constraint (CUC)** framework, darkness is not treated as a moral category, mystical substance, or new physical force. It is modeled as a quantitative **coherence-loss load** (\(D[\Sigma, t]\)) that exponentially penalizes usable system persistence (S(t))—paired with an active restoration controller (\(k_{\text{restore}}\)) that stabilizes systems before macroscopic failure occurs.
 
 ---
 
 ## Mathematical Scaffold
 
-### Darkness Functional
+### 1. The Darkness Functional
+\[D[\Sigma, t] = \alpha\bigl(1 - r(t)\bigr) + \beta N(t) + \gamma F_C(t) + \delta M_I(t)\]
 
-```text
-D[Σ,t] = α(1 - r(t)) + βN(t) + γF_C(t) + δM_I(t)
-```
+* **1 - r(t):** Global phase or semantic synchronization loss (r ∈).
+* **N(t):** Stochastic noise, turbulent velocity variance, or retrieval distractor load.
+* **\(F_C(t)\):** Constraint failure or boundary drift outside admissible operating limits.
+* **\(M_I(t)\):** Subsystem interface mismatch (local-vs-global divergence or cross-document contradiction).
 
-Where:
-
-| Symbol | Meaning |
-|---|---|
-| `D[Σ,t]` | darkness load of system `Σ` at time `t` |
-| `r(t)` | coherence order parameter, usually bounded in `[0,1]` |
-| `N(t)` | noise, variance, or perturbation load |
-| `F_C(t)` | constraint failure or boundary degradation |
-| `M_I(t)` | interface mismatch between subsystems or scales |
-| `α, β, γ, δ` | domain-specific weights |
-
-### Darkness-Aware Persistence
-
-```text
-S(t) = r(t) · C(Ω,t) · Φ(t) · exp(-D[Σ,t])
-```
-
-Where:
-
-| Symbol | Meaning |
-|---|---|
-| `S(t)` | persistence score |
-| `C(Ω,t)` | constraint structure or admissible state manifold |
-| `Φ(t)` | sustaining throughput: energy, information, attention, resources, computation, etc. |
-| `exp(-D[Σ,t])` | decay factor from accumulated darkness load |
-
-This formulation treats darkness as a penalty on persistence, not as an independent entity.
-
----
-
-## Interpretation
-
-A system can appear locally ordered while still losing global coherence.
-
-This happens when:
-
-- local subsystems synchronize but fail to align globally;
-- interfaces accumulate mismatch;
-- constraint boundaries weaken or become brittle;
-- throughput sustains activity without sustaining structure;
-- noise is suppressed locally but displaced elsewhere.
-
-The Darkness Functional is meant to identify those hidden loads before collapse becomes obvious.
-
----
-
-## Relationship to CUC
-
-CUC proposes:
-
-```text
-Structure = Coherence × Constraint × Throughput
-```
-
-The Darkness Functional describes the inverse pressure on that structure:
-
-```text
-Persistence decreases as coherence-loss load increases.
-```
-
-In plain language:
-
-- CUC asks how structure persists.
-- The Darkness Functional asks how structure degrades.
-
----
-
-## Dark-Sector Stewardship Project
-
-The repository now includes the foundational **DSSP Master Packet v1.0**: a stewardship-first architecture for dark-sector residual analysis, claim calculus, gate logic, blinded qualification, candidate interfaces, false-darkness defense, safe analog laboratories, accounting, handoff, and release governance.
-
-DSSP preserves the original Darkness Functional scaffold while extending it into a bounded scientific and engineering research program.
-
-[Open the DSSP project index](dssp/README.md)
-
----
-
-## Initial Research Questions
-
-1. Can `D[Σ,t]` predict collapse before a system visibly fails?
-2. Does interface mismatch dominate failure in multi-scale systems?
-3. Can restoration improve final persistence without erasing accumulated darkness load?
-4. Can local coherence coexist with global incoherence?
-5. Can AI memory systems be evaluated for darkness load through fragmentation, retrieval failure, contradiction, and missing chronology?
-
----
-
-## Initial Predictions
-
-The Darkness Functional predicts that:
-
-- persistence falls as darkness load rises;
-- interface mismatch can dominate total system failure;
-- restoration can improve future coherence without automatically removing accumulated historical load;
-- local coherence can mask global instability;
-- systems with high throughput but poor alignment can become more active while becoming less coherent;
-- hidden contradiction and missing provenance increase coherence-loss load in memory systems.
+### 2. Darkness-Aware Persistence & Hysteresis
+\[S(t) = r(t) \cdot C(\Omega, t) \cdot \Phi(t) \cdot \exp\bigl(-D[\Sigma, t]\bigr), \qquad \mathcal{H}_D(t) = \int_0^t D[\Sigma, \tau]\,d\tau\]
 
 ---
 
 ## Repository Structure
 
 ```text
-.
-├── README.md
-├── LICENSE
-├── CITATION.cff
-├── VERSION.md
-├── paper/
-│   └── darkness_functional.md
+darkness-functional/
+├── .github/workflows/
+│   └── test.yml                            # Automated pytest & figure generation CI
 ├── src/
-│   └── darkness_simulation_package.py
-├── figures/
-│   └── README.md
-├── docs/
-│   └── glossary.md
-└── dssp/
-    ├── README.md
-    ├── docs/
-    └── assets/
+│   ├── darkness_simulation_package.py      # Multi-group Kuramoto network & D[Σ, t] diagnostics
+│   ├── restoration_sweep.py                # Ensemble restoration coupling (k_restore) sweep
+│   ├── ai_memory_darkness.py               # AI agent memory contradiction & throughput benchmark
+│   └── lens_array_bridge.py                # Spatial potential / acoustic array critical spacing model
+├── hardware/
+│   ├── README.md                           # CUC-Array v1 BOM, wiring guide & bring-up instructions
+│   ├── bracket.scad                        # 3D-printable 34.3 mm resonant C-bracket (OpenSCAD)
+│   ├── live_telemetry_plot.py              # Real-time 3-panel USB Serial oscilloscope & CSV logger
+│   └── firmware/
+│       └── darkness_levitator_esp32s3.ino  # Auto-calibrated 40 kHz ESP32-S3 phase-restoration firmware
+├── tests/
+│   └── test_darkness_functional.py         # Automated mathematical invariant & prediction tests
+├── paper/
+│   ├── darkness_functional.md              # Markdown manuscript
+│   └── darkness_functional.tex             # LaTeX preprint manuscript
+├── dssp/                                   # Dark-Sector Stewardship Project (DSSP Master Packet v1.0)
+├── docs/                                   # Glossary & conceptual notes
+├── figures/                                # Diagnostic output plots
+├── CITATION.cff
+├── LICENSE
+├── VERSION.md
+└── requirements.txt
 ```
 
 ---
 
-## Current Status
+## Quickstart
 
-This repository is at **v0.1.0** for the original Darkness Functional scaffold. The DSSP packet is independently versioned as **DSSP Master Packet v1.0**.
+```bash
+pip install -r requirements.txt
+pytest -v
 
-The framework is:
+# Run core simulation benchmarks
+python src/darkness_simulation_package.py
+python src/restoration_sweep.py
+python src/ai_memory_darkness.py
+python src/lens_array_bridge.py
 
-- conceptually drafted;
-- mathematically scaffolded;
-- connected to CUC;
-- prepared for computational experimentation;
-- not yet externally validated;
-- not yet peer reviewed.
-
-Earlier language describing validation should be read as **internal conceptual validation**, not external empirical confirmation.
-
----
-
-## Next Milestones
-
-1. Run and document the baseline oscillator simulation.
-2. Add example output figures.
-3. Add tests for parameter sensitivity.
-4. Compare behavior against existing synchronization and complex-systems models.
-5. Add an AI-memory case study focused on chronology, retrieval, contradiction, and provenance.
-6. Begin the executable DSSP schema, residual-engine, and hidden-cause benchmark builds.
-7. Prepare a preprint-style paper for external critique.
+# Launch live CUC-Array v1 hardware telemetry dashboard (requires ESP32-S3 connected via USB)
+python hardware/live_telemetry_plot.py
+```
 
 ---
 
 ## Citation
 
-Use `CITATION.cff` for citation metadata.
+```bibtex
+@misc{fry2026darkness,
+  author       = {Fry, Gage},
+  title        = {Darkness Functional: A Diagnostic Framework for Coherence Loss Under Constraint},
+  year         = {2026},
+  publisher    = {GitHub},
+  howpublished \(= {\url{https://github.com/thefourceprinciples/darkness-functional}} \)}
+```
 
-Suggested short citation:
-
-> Fry, G. (2026). *Darkness Functional: A Diagnostic Framework for Coherence Loss Under Constraint*.
-
----
-
-## License
-
-This repository is released under the MIT License.
