@@ -1,201 +1,201 @@
-"""
-Darkness Functional baseline simulation.
-
-This script provides a small, readable toy model for exploring the Darkness
-Functional in a coupled oscillator system. It is not empirical validation.
-It is a reproducible starting point for computational experiments.
-
-Run:
-    python src/darkness_simulation_package.py
-
-Outputs:
-    figures/comparison_r.png
-    figures/comparison_D.png
-    figures/comparison_S.png
-"""
-
-from __future__ import annotations
-
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, Tuple
-
-import matplotlib.pyplot as plt
+import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-@dataclass(frozen=True)
-class SimulationConfig:
-    """Configuration for the oscillator simulation."""
-
-    n_oscillators: int = 48
-    steps: int = 600
-    dt: float = 0.05
-    coupling: float = 0.35
-    noise_scale: float = 0.08
-    perturb_start: int = 220
-    perturb_end: int = 360
-    perturb_strength: float = 0.85
-    restoration_strength: float = 0.45
-    seed: int = 42
+def order_parameter(theta: np.ndarray) -> tuple[float, float]:
+    """Compute Kuramoto order parameter magnitude r in [0, 1] and mean phase psi."""
+    z = np.mean(np.exp(1j * theta))
+    return float(np.abs(z)), float(np.angle(z))
 
 
-@dataclass(frozen=True)
-class DarknessWeights:
-    """Weights for the Darkness Functional."""
-
-    alpha: float = 1.0  # incoherence weight
-    beta: float = 0.7   # noise weight
-    gamma: float = 0.8  # constraint failure weight
-    delta: float = 0.9  # interface mismatch weight
+def group_order_parameters(theta: np.ndarray, group_ids: np.ndarray, groups: int) -> np.ndarray:
+    """Compute order parameter r_g for each subsystem group."""
+    return np.array([order_parameter(theta[group_ids == g])[0] for g in range(groups)])
 
 
-def order_parameter(theta: np.ndarray) -> float:
-    """Return Kuramoto-style coherence score R in [0, 1]."""
-
-    return float(abs(np.mean(np.exp(1j * theta))))
-
-
-def circular_mismatch(theta: np.ndarray) -> float:
-    """Estimate interface mismatch between two halves of the oscillator array."""
-
-    half = len(theta) // 2
-    left = order_parameter(theta[:half])
-    right = order_parameter(theta[half:])
-    global_r = order_parameter(theta)
-    return float(max(0.0, ((left + right) / 2.0) - global_r))
+def interface_mismatch(rg: np.ndarray, r_global: float) -> float:
+    """
+    Measure subsystem interface mismatch M_I(t):
+    combines inter-group coherence dispersion and local-vs-global phase divergence
+    (captures cases where groups synchronize internally but misalign globally).
+    """
+    inter_group_spread = float(np.mean(np.abs(rg - np.mean(rg))))
+    local_global_gap = max(0.0, float(np.mean(rg)) - r_global)
+    return inter_group_spread + local_global_gap
 
 
-def darkness_load(
-    r: float,
-    noise: float,
-    constraint_failure: float,
-    mismatch: float,
-    weights: DarknessWeights,
-) -> float:
-    """Compute D = alpha(1-r) + beta*N + gamma*F_C + delta*M_I."""
-
-    return float(
-        weights.alpha * (1.0 - r)
-        + weights.beta * noise
-        + weights.gamma * constraint_failure
-        + weights.delta * mismatch
-    )
+def constraint_failure(theta: np.ndarray, bound: float = 1.2) -> float:
+    """Quadratic boundary degradation penalty F_C(t) outside admissible phase window."""
+    return float(np.mean(np.maximum(0.0, np.abs(theta) - bound) ** 2))
 
 
-def persistence_score(
-    r: float,
-    constraint_integrity: float,
-    throughput: float,
-    darkness: float,
-) -> float:
-    """Compute S = r * C * Phi * exp(-D)."""
-
-    return float(r * constraint_integrity * throughput * np.exp(-darkness))
+def noise_metric(deterministic_vel: np.ndarray, stochastic_kick: np.ndarray, dt: float) -> float:
+    """Perturbation load N(t) combining velocity dispersion and active stochastic variance."""
+    effective_noise = stochastic_kick / np.sqrt(dt)
+    return float(np.var(deterministic_vel) + np.var(effective_noise))
 
 
-def simulate(
-    config: SimulationConfig,
-    weights: DarknessWeights,
-    restoration: bool = False,
-) -> Dict[str, np.ndarray]:
-    """Run the toy oscillator model."""
+def run_simulation(
+    k_restore: float = 0.8,
+    seed: int = 7,
+    N: int = 60,
+    groups: int = 3,
+    T: float = 40.0,
+    dt: float = 0.02,
+    K_local: float = 1.2,
+    K_global: float = 0.4,
+    noise_base: float = 0.08,
+    noise_perturb: float = 0.22,
+    perturb_window: tuple[float, float] = (10.0, 18.0),
+    restore_window: tuple[float, float] = (22.0, 34.0),
+    weights: tuple[float, float, float, float] = (1.0, 0.8, 0.7, 1.3),
+    C_omega_base: float = 1.0,
+    phi_base: float = 1.0,
+    phi_restore_boost: float = 0.25,
+) -> dict[str, np.ndarray]:
+    """
+    Simulate constrained Kuramoto network under perturbation and restoration,
+    evaluating Darkness Functional D[Sigma, t] and Persistence S(t).
+    """
+    rng = np.random.default_rng(seed)
+    steps = int(T / dt)
+    alpha, beta, gamma, delta = weights
 
-    rng = np.random.default_rng(config.seed)
-    theta = rng.uniform(0.0, 2.0 * np.pi, config.n_oscillators)
-    natural_frequency = rng.normal(1.0, 0.05, config.n_oscillators)
+    theta = rng.uniform(-np.pi, np.pi, N)
+    omega = rng.normal(0.0, 0.25, N)
+    group_ids = np.array([i % groups for i in range(N)])
 
-    r_values = np.zeros(config.steps)
-    d_values = np.zeros(config.steps)
-    s_values = np.zeros(config.steps)
-    mismatch_values = np.zeros(config.steps)
-    constraint_values = np.zeros(config.steps)
+    # Precompute pairwise coupling matrix K_ij / N
+    same_group = group_ids[:, None] == group_ids[None, :]
+    K_matrix = np.where(same_group, K_local, K_global) / N
+    np.fill_diagonal(K_matrix, 0.0)
 
-    target_phase = 0.0
+    t_log = np.zeros(steps)
+    r_log = np.zeros(steps)
+    r_local_mean_log = np.zeros(steps)
+    d_log = np.zeros(steps)
+    d_cum_log = np.zeros(steps)
+    s_log = np.zeros(steps)
+    components_log = np.zeros((steps, 4))  # [decoherence, noise, constraint_fail, mismatch]
 
-    for step in range(config.steps):
-        in_perturbation = config.perturb_start <= step <= config.perturb_end
+    cumulative_darkness = 0.0
 
-        perturbation = config.perturb_strength if in_perturbation else 0.0
-        constraint_failure = perturbation
-        constraint_integrity = max(0.0, 1.0 - constraint_failure)
+    for step in range(steps):
+        t = step * dt
 
-        coupling_term = config.coupling * np.sin(np.mean(theta) - theta)
-        noise = config.noise_scale + perturbation * rng.uniform(0.0, 1.0)
-        stochastic_term = rng.normal(0.0, noise, config.n_oscillators)
+        in_perturb = perturb_window[0] < t < perturb_window[1]
+        in_restore = restore_window[0] < t < restore_window[1]
 
-        if restoration and step > config.perturb_end:
-            restore_term = config.restoration_strength * np.sin(target_phase - theta)
-        else:
-            restore_term = 0.0
+        noise_sigma = noise_perturb if in_perturb else noise_base
 
-        theta = theta + config.dt * (natural_frequency + coupling_term + restore_term) + stochastic_term
+        # Vectorized pairwise Kuramoto coupling: sum_j K_ij * sin(theta_j - theta_i)
+        phase_diff = theta[None, :] - theta[:, None]
+        coupling = np.sum(K_matrix * np.sin(phase_diff), axis=1)
 
-        r = order_parameter(theta)
-        mismatch = circular_mismatch(theta)
-        darkness = darkness_load(r, noise, constraint_failure, mismatch, weights)
-        throughput = 1.0
-        persistence = persistence_score(r, constraint_integrity, throughput, darkness)
+        r, psi = order_parameter(theta)
+        control = k_restore * np.sin(psi - theta) if in_restore else np.zeros(N)
 
-        r_values[step] = r
-        d_values[step] = darkness
-        s_values[step] = persistence
-        mismatch_values[step] = mismatch
-        constraint_values[step] = constraint_integrity
+        deterministic_vel = omega + coupling + control
+        stochastic_kick = rng.normal(0.0, noise_sigma * np.sqrt(dt), N)
+
+        # Euler-Maruyama state update
+        theta = theta + dt * deterministic_vel + stochastic_kick
+        theta = (theta + np.pi) % (2.0 * np.pi) - np.pi
+
+        # Evaluate state metrics after step
+        r, _ = order_parameter(theta)
+        rg = group_order_parameters(theta, group_ids, groups)
+
+        decoherence = 1.0 - r
+        N_val = noise_metric(deterministic_vel, stochastic_kick, dt)
+        FC_val = constraint_failure(theta)
+        MI_val = interface_mismatch(rg, r)
+
+        D = alpha * decoherence + beta * N_val + gamma * FC_val + delta * MI_val
+        cumulative_darkness += D * dt
+
+        # Admissible constraint manifold C(Omega, t) & sustaining throughput Phi(t)
+        C_omega = C_omega_base * np.exp(-0.5 * FC_val)
+        Phi = phi_base + (phi_restore_boost * k_restore if in_restore else 0.0)
+
+        S = r * C_omega * Phi * np.exp(-D)
+
+        t_log[step] = t
+        r_log[step] = r
+        r_local_mean_log[step] = float(np.mean(rg))
+        d_log[step] = D
+        d_cum_log[step] = cumulative_darkness
+        s_log[step] = S
+        components_log[step] = [
+            alpha * decoherence,
+            beta * N_val,
+            gamma * FC_val,
+            delta * MI_val,
+        ]
 
     return {
-        "r": r_values,
-        "D": d_values,
-        "S": s_values,
-        "mismatch": mismatch_values,
-        "constraint_integrity": constraint_values,
+        "t": t_log,
+        "r": r_log,
+        "r_local_mean": r_local_mean_log,
+        "D": d_log,
+        "D_cum": d_cum_log,
+        "S": s_log,
+        "components": components_log,
     }
 
 
-def plot_comparison(
-    baseline: Dict[str, np.ndarray],
-    restored: Dict[str, np.ndarray],
-    key: str,
-    ylabel: str,
-    output_path: Path,
-) -> None:
-    """Plot baseline versus restored condition for one metric."""
+def save_baseline_figures(results: dict[str, np.ndarray], fig_dir: str = "../figures") -> None:
+    """Generate diagnostic plots for r(t), D[Sigma, t], and S(t)."""
+    os.makedirs(fig_dir, exist_ok=True)
+    t = results["t"]
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    plt.figure(figsize=(9, 5))
-    plt.plot(baseline[key], label="baseline")
-    plt.plot(restored[key], label="restoration")
-    plt.xlabel("time step")
-    plt.ylabel(ylabel)
-    plt.title(ylabel)
+    # 1. Global vs Local Coherence r(t)
+    plt.figure(figsize=(8, 4))
+    plt.plot(t, results["r"], label="Global Coherence r(t)", linewidth=2)
+    plt.plot(t, results["r_local_mean"], "--", label="Mean Local Group Coherence", alpha=0.8)
+    plt.axvspan(10, 18, color="red", alpha=0.1, label="Perturbation")
+    plt.axvspan(22, 34, color="green", alpha=0.1, label="Restoration")
+    plt.xlabel("Time t")
+    plt.ylabel("Order Parameter r(t)")
+    plt.title("Global vs. Local Subsystem Coherence")
     plt.legend()
     plt.tight_layout()
-    plt.savefig(output_path, dpi=160)
+    plt.savefig(os.path.join(fig_dir, "comparison_r.png"), dpi=150)
+    plt.close()
+
+    # 2. Darkness Functional D[Sigma, t] & Load Breakdown
+    plt.figure(figsize=(8, 4))
+    plt.plot(t, results["D"], color="black", linewidth=2, label="Total Darkness D[Σ, t]")
+    labels = ["α(1 - r)", "β N(t)", "γ F_C(t)", "δ M_I(t)"]
+    for idx, label in enumerate(labels):
+        plt.plot(t, results["components"][:, idx], alpha=0.75, label=label)
+    plt.axvspan(10, 18, color="red", alpha=0.1)
+    plt.axvspan(22, 34, color="green", alpha=0.1)
+    plt.xlabel("Time t")
+    plt.ylabel("Darkness Load")
+    plt.title("Darkness Functional D[Σ, t] Component Breakdown")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(os.path.join(fig_dir, "comparison_D.png"), dpi=150)
+    plt.close()
+
+    # 3. Darkness-Aware Persistence S(t)
+    plt.figure(figsize=(8, 4))
+    plt.plot(t, results["S"], color="navy", linewidth=2, label="Persistence S(t)")
+    plt.axvspan(10, 18, color="red", alpha=0.1, label="Perturbation")
+    plt.axvspan(22, 34, color="green", alpha=0.1, label="Restoration")
+    plt.xlabel("Time t")
+    plt.ylabel("Persistence S(t)")
+    plt.title("Darkness-Aware Persistence S(t) = r · C(Ω,t) · Φ(t) · exp(-D)")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(os.path.join(fig_dir, "comparison_S.png"), dpi=150)
     plt.close()
 
 
-def run_experiment() -> Tuple[Dict[str, np.ndarray], Dict[str, np.ndarray]]:
-    """Run baseline and restoration scenarios, then save comparison plots."""
-
-    config = SimulationConfig()
-    weights = DarknessWeights()
-
-    baseline = simulate(config, weights, restoration=False)
-    restored = simulate(config, weights, restoration=True)
-
-    figure_dir = Path("figures")
-    plot_comparison(baseline, restored, "r", "Coherence R(t)", figure_dir / "comparison_r.png")
-    plot_comparison(baseline, restored, "D", "Darkness Load D(t)", figure_dir / "comparison_D.png")
-    plot_comparison(baseline, restored, "S", "Persistence S(t)", figure_dir / "comparison_S.png")
-
-    return baseline, restored
-
-
 if __name__ == "__main__":
-    baseline_result, restored_result = run_experiment()
-    print("Baseline final R:", round(float(baseline_result["r"][-1]), 4))
-    print("Restored final R:", round(float(restored_result["r"][-1]), 4))
-    print("Baseline final D:", round(float(baseline_result["D"][-1]), 4))
-    print("Restored final D:", round(float(restored_result["D"][-1]), 4))
-    print("Baseline final S:", round(float(baseline_result["S"][-1]), 4))
-    print("Restored final S:", round(float(restored_result["S"][-1]), 4))
+    res = run_simulation(k_restore=0.8, seed=7)
+    save_baseline_figures(res)
+    print(f"Simulation complete. Final S(T)={res['S'][-1]:.3f}, Cumulative D={res['D_cum'][-1]:.2f}")
+
