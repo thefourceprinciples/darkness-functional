@@ -13,7 +13,11 @@ def order_parameter(theta: np.ndarray) -> tuple[float, float]:
 
 def group_order_parameters(theta: np.ndarray, group_ids: np.ndarray, groups: int) -> np.ndarray:
     """Compute order parameter r_g for each subsystem group."""
-    return np.array([order_parameter(theta[group_ids == g])[0] for g in range(groups)])
+    vals = []
+    for g in range(groups):
+        rg_val, _ = order_parameter(theta[group_ids == g])
+        vals.append(rg_val)
+    return np.array(vals)
 
 
 def interface_mismatch(rg: np.ndarray, r_global: float) -> float:
@@ -59,6 +63,8 @@ def run_simulation(
     rng = np.random.default_rng(seed)
     steps = int(T / dt)
     alpha, beta, gamma, delta = weights
+    t_p0, t_p1 = perturb_window
+    t_r0, t_r1 = restore_window
 
     theta = rng.uniform(-np.pi, np.pi, N)
     omega = rng.normal(0.0, 0.25, N)
@@ -79,9 +85,9 @@ def run_simulation(
     cumulative_darkness = 0.0
 
     for step in range(steps):
-        in_perturb = perturb_window[0] < t < perturb_window[1]
-        in_restore = restore_window[0] < t < restore_window[1]
-        in_restore = restore_window[0] < t < restore_window[1]
+        t = step * dt
+        in_perturb = t_p0 < t < t_p1
+        in_restore = t_r0 < t < t_r1
         noise_sigma = noise_perturb if in_perturb else noise_base
 
         phase_diff = theta[None, :] - theta[:, None]
