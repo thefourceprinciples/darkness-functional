@@ -44,9 +44,8 @@ def sweep_restoration(
     cum_D_mean = np.array(cum_D_mean)
     cum_D_std = np.array(cum_D_std)
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.5))
 
-    ax1 = axes
     ax1.plot(k_vals, post_S_mean, "o-", color="navy", label="Post-Control Persistence S(t > 34)")
     ax1.fill_between(k_vals, post_S_mean - post_S_std, post_S_mean + post_S_std, color="navy", alpha=0.15)
     ax1.plot(k_vals, post_D_mean, "s--", color="crimson", label="Post-Control Darkness D(t > 34)")
@@ -57,7 +56,6 @@ def sweep_restoration(
     ax1.legend()
     ax1.grid(alpha=0.3)
 
-    ax2 = axes
     ax2.plot(k_vals, cum_D_mean, "^-", color="darkorange", label="Cumulative Historical Load ∫D dt")
     ax2.fill_between(k_vals, cum_D_mean - cum_D_std, cum_D_mean + cum_D_std, color="darkorange", alpha=0.2)
     ax2.set_xlabel("Restoration Coupling (k_restore)")
@@ -74,3 +72,4 @@ def sweep_restoration(
 
 if __name__ == "__main__":
     sweep_restoration()
+
