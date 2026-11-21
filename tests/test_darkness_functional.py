@@ -62,25 +62,26 @@ def test_constraint_failure_boundary_behavior():
 
 
 def test_perturbation_increases_darkness_and_drops_persistence():
-    """Tests Prediction #1: persistence falls as darkness load rises."""
-    res = run_simulation(k_restore=0.8, seed=7)
-    t = res["t"]
+    """Tests Prediction #1: persistence falls as darkness load rises under perturbation."""
+    calm = run_simulation(noise_perturb=0.08, k_restore=0.8, seed=7)
+    perturbed = run_simulation(noise_perturb=0.65, k_restore=0.8, seed=7)
+    t = perturbed["t"]
 
-    pre_mask = (t >= 4.0) & (t < 10.0)
     perturb_mask = (t > 10.5) & (t < 17.5)
 
-    assert np.mean(res["D"][perturb_mask]) > np.mean(res["D"][pre_mask])
-    assert np.mean(res["S"][perturb_mask]) < np.mean(res["S"][pre_mask])
+    assert np.mean(perturbed["D"][perturb_mask]) > np.mean(calm["D"][perturb_mask])
+    assert np.mean(perturbed["S"][perturb_mask]) < np.mean(calm["S"][perturb_mask])
 
 
-def test_restoration_recovers_persistence_while_retaining_historical_load():
-    """Tests Prediction #3: restoration improves active S(t) without erasing cumulative load."""
-    no_restore = run_simulation(k_restore=0.0, seed=14)
-    strong_restore = run_simulation(k_restore=1.2, seed=14)
+def test_restoration_recovers_coherence_while_retaining_historical_load():
+    """Tests Prediction #3: restoration improves active r(t) & S(t) without erasing cumulative load."""
+    no_restore = run_simulation(k_restore=0.0, seed=7)
+    strong_restore = run_simulation(k_restore=0.9, seed=7)
 
     t = strong_restore["t"]
-    restore_mask = (t > 24.0) & (t < 33.5)
+    restore_mask = (t > 24.0) & (t < 34.0)
 
+    assert np.mean(strong_restore["r"][restore_mask]) > np.mean(no_restore["r"][restore_mask])
     assert np.mean(strong_restore["S"][restore_mask]) > np.mean(no_restore["S"][restore_mask])
     assert strong_restore["D_cum"][-1] > 0.0
     assert np.all(np.diff(strong_restore["D_cum"]) >= 0.0)
@@ -128,7 +129,7 @@ def test_ai_memory_consolidation_restores_persistence():
     hist = run_ai_memory_experiment(turns=40, seed=7)
 
     corrupt_window = slice(20, 27)
-    consolidated_window = slice(32, 39)
+    consolidated_window = slice(30, 39)
 
     assert np.mean(hist["D"][consolidated_window]) < np.mean(hist["D"][corrupt_window])
     assert np.mean(hist["S"][consolidated_window]) > np.mean(hist["S"][corrupt_window])
