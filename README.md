@@ -1,98 +1,95 @@
 # Darkness Functional
 
-![CI Status](https://github.com)
-[![License: MIT](https://shields.io)](LICENSE)
+**A falsifiable degradation and constraint-strain diagnostic for the Coherence Under Constraint (`CUC v0.2`) research program.**
 
-A quantitative diagnostic framework and closed-loop stabilization suite for modeling coherence failure, interface mismatch, and persistence collapse under constraint.
+[![Status: Verified E2 Core](https://shields.io)](src/darkness_core.py)
+[![Garden Identity: G01-T006](https://shields.io)](https://github.com)
+[![License: AGPL-3.0](https://shields.io)](LICENSE)
 
-**Author:** Gage Fry (Rockford, Illinois)  
-**Project Lineage:** The Fource Principles / Coherence Under Constraint (CUC)  
-**Status:** v0.2.0 — Simulation Benchmarks, Automated CI, AI Memory Case Study & CUC-Array v1 Hardware Blueprint  
-
----
-
-## Overview
-
-Complex dynamical networks, agentic AI memory stores, and physical sensor-actuator arrays rarely fail instantaneously. Instead, they suffer from **silent coherence collapse** driven by phase drift, stochastic noise, boundary degradation, and inter-subsystem contradiction.
-
-Within the **Coherence Under Constraint (CUC)** framework, darkness is not treated as a moral category, mystical substance, or new physical force. It is modeled as a quantitative **coherence-loss load** (\(D[\Sigma, t]\)) that exponentially penalizes usable system persistence (S(t))—paired with an active restoration controller (\(k_{\text{restore}}\)) that stabilizes systems before macroscopic failure occurs.
+**Author:** Gage Fry  
+**Lineage:** The Fource Principles / Framework Garden  
+**Canonical Garden identity:** G01-T006  
+**Parent trunk:** [`coherence-under-constraint`](https://github.com) (`G01-T003`, v0.2.0-draft.1)
 
 ---
 
-## Mathematical Scaffold
+## What the Darkness Functional is
 
-### 1. The Darkness Functional
-\[D[\Sigma, t] = \alpha\bigl(1 - r(t)\bigr) + \beta N(t) + \gamma F_C(t) + \delta M_I(t)\]
+In **Coherence Under Constraint (CUC)**, high coherence alone does not guarantee persistence—systems fail through noise accumulation, boundary erosion, and cross-module interface mismatch.
 
-* **1 - r(t):** Global phase or semantic synchronization loss (r ∈).
-* **N(t):** Stochastic noise, turbulent velocity variance, or retrieval distractor load.
-* **\(F_C(t)\):** Constraint failure or boundary drift outside admissible operating limits.
-* **\(M_I(t)\):** Subsystem interface mismatch (local-vs-global divergence or cross-document contradiction).
-
-### 2. Darkness-Aware Persistence & Hysteresis
-\[S(t) = r(t) \cdot C(\Omega, t) \cdot \Phi(t) \cdot \exp\bigl(-D[\Sigma, t]\bigr), \qquad \mathcal{H}_D(t) = \int_0^t D[\Sigma, \tau]\,d\tau\]
-
----
-
-## Repository Structure
+The **Darkness Functional** D(t) ≥ 0 (`DAR-1`, `DAR-2`) is a nonnegative operational diagnostic that quantifies modeled degradation and attributes strain across four independent channels:
 
 ```text
-darkness-functional/
-├── .github/workflows/
-│   └── test.yml                            # Automated pytest & figure generation CI
-├── src/
-│   ├── darkness_simulation_package.py      # Multi-group Kuramoto network & D[Σ, t] diagnostics
-│   ├── restoration_sweep.py                # Ensemble restoration coupling (k_restore) sweep
-│   ├── ai_memory_darkness.py               # AI agent memory contradiction & throughput benchmark
-│   └── lens_array_bridge.py                # Spatial potential / acoustic array critical spacing model
-├── hardware/
-│   ├── README.md                           # CUC-Array v1 BOM, wiring guide & bring-up instructions
-│   ├── bracket.scad                        # 3D-printable 34.3 mm resonant C-bracket (OpenSCAD)
-│   ├── live_telemetry_plot.py              # Real-time 3-panel USB Serial oscilloscope & CSV logger
-│   └── firmware/
-│       └── darkness_levitator_esp32s3.ino  # Auto-calibrated 40 kHz ESP32-S3 phase-restoration firmware
-├── tests/
-│   └── test_darkness_functional.py         # Automated mathematical invariant & prediction tests
-├── paper/
-│   ├── darkness_functional.md              # Markdown manuscript
-│   └── darkness_functional.tex             # LaTeX preprint manuscript
-├── dssp/                                   # Dark-Sector Stewardship Project (DSSP Master Packet v1.0)
-├── docs/                                   # Glossary & conceptual notes
-├── figures/                                # Diagnostic output plots
-├── CITATION.cff
-├── LICENSE
-├── VERSION.md
-└── requirements.txt
+D(t) = α(1 - r_G(t)) + β·noise(t) + γ·boundary_failure(t) + δ·interface_mismatch(t) ≥ 0
 ```
 
----
+with exponential persistence attenuation (`DAR-4`):
 
-## Quickstart
+```text
+a_D(t) = exp(-D(t)) ∈ (0, 1]
+```
+
+and reduced persistence-support propensity (`CUC-31`):
+
+```text
+Q_CUC(t) = K · r_G(t) · χ_M(t) · ψ_J(t) · exp(-D(t)) / (1 + λ_bad(t))
+```
+
+## What it is not
+
+- **Not a mystical or cosmological entity:** "Darkness" in CUC is strictly a mathematical measure of organization-degrading loss, noise, and boundary mismatch.
+- **Not a standalone replacement for domain physics:** Calibration weights (α, β, γ, δ ≥ 0) must be anchored to observable failure modes in each target domain.
+
+## Quick start
+
+Zero external dependencies (Python 3.11+ standard library only):
 
 ```bash
-pip install -r requirements.txt
-pytest -v
-
-# Run core simulation benchmarks
-python src/darkness_simulation_package.py
-python src/restoration_sweep.py
-python src/ai_memory_darkness.py
-python src/lens_array_bridge.py
-
-# Launch live CUC-Array v1 hardware telemetry dashboard (requires ESP32-S3 connected via USB)
-python hardware/live_telemetry_plot.py
+python -m pytest -v tests/test_darkness_core.py
+python src/darkness_core.py
 ```
 
----
+### Example Python usage
 
-## Citation
+```python
+from src.darkness_core import evaluate_darkness, propensity_with_darkness
 
-```bibtex
-@misc{fry2026darkness,
-  author       = {Fry, Gage},
-  title        = {Darkness Functional: A Diagnostic Framework for Coherence Loss Under Constraint},
-  year         = {2026},
-  publisher    = {GitHub},
-  howpublished \(= {\url{https://github.com/thefourceprinciples/darkness-functional}} \)}
+report = evaluate_darkness(
+    coherence_r=0.82,
+    noise_level=0.14,
+    boundary_failure=0.08,
+    interface_mismatch=0.35,
+)
+
+print(report.darkness_d)          # 0.1875
+print(report.attenuation_factor)  # 0.829029
+print(report.dominant_driver)     # 'interface_mismatch'
+print(report.severity_band)       # 'NOMINAL // BOUNDED DRIFT'
+
+q_cuc = propensity_with_darkness(
+    capacity_k=1.0,
+    coherence_r=0.82,
+    constraint_fitness_chi=0.88,
+    throughput_adequacy_psi=0.95,
+    darkness_d=report.darkness_d,
+)
 ```
 
+## Repository structure
+
+```text
+.
+├── README.md
+├── LICENSE
+├── src/
+│   └── darkness_core.py
+├── tests/
+│   └── test_darkness_core.py
+└── .github/
+    └── workflows/
+        └── ci.yml
+```
+
+## License
+
+Code and repository documentation are released under the [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE).
